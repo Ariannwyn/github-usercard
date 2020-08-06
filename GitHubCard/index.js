@@ -28,18 +28,31 @@
     user, and adding that card to the DOM.
 */
 
+let data = {
+  avatar_url: "https://i.pinimg.com/originals/a4/71/29/a471298a862ab551a81761b0d68abd6b.jpg",
+  bio: null,
+  followers: 1,
+  following: 0,
+  html_url: "url",
+  location: "Portland, OR",
+  login: "Ariannwyn",
+  name: "Ari Adams",
+  url: "url",
+}
+let fakeData = [data, data, data];
+
 const friendsArray = ['https://api.github.com/users/Uniloki', 'https://api.github.com/users/squishiedragon', 'https://api.github.com/users/allraec', 'https://api.github.com/users/harvey-magana', 'https://api.github.com/users/ariannwyn']
-friendsArray.forEach(friend =>
+let cards = document.getElementsByClassName('cards')[0];
+fakeData.forEach(friend => {
   axios.get(friend) 
     .then(response => {
       console.log(response.data)
-      const cards = document.getElementsByClassName('cards')[0];
-      cards.appendChild(cardMaker(response.data))
+      cards.appendChild(cardMaker(response.data));
     })
     .catch(error => {
       console.log("error")
     })
-  )
+})
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -73,9 +86,28 @@ function cardMaker(data) {
   const followers = document.createElement('p');
   const following = document.createElement('p');
   const bio = document.createElement('p');
+  const expand = document.createElement('span');
+
+  card.classList.add('card');
+  cardInfo.classList.add('card-info');
+  name.classList.add('name');
+  username.classList.add('username');
+  expand.classList.add('expandButton');
+
+  userImg.setAttribute('src', data.avatar_url);
+  name.textContent = data.name; 
+  username.textContent = data.login;
+  location.textContent = "Location: "+data.location;
+  profile.textContent = "Profile: "
+  link.setAttribute = data.html_url;
+  followers.textContent = "Followers: "+data.followers;
+  following.textContent = "Following: "+data.following;
+  bio.textContent = "Bio: "+data.bio;
+  expand.textContent = "+";
 
   card.appendChild(userImg);
   card.appendChild(cardInfo);
+  card.appendChild(expand);
   cardInfo.appendChild(name);
   cardInfo.appendChild(username);
   cardInfo.appendChild(location);
@@ -84,23 +116,10 @@ function cardMaker(data) {
   cardInfo.appendChild(following);
   cardInfo.appendChild(bio);
   profile.appendChild(link);
-
-  userImg.setAttribute('src', data.avatar_url);
-  link.setAttribute('src', data.html_url);
-  card.classList.add('card');
-  cardInfo.classList.add('card-info');
-  name.classList.add('name');
-  username.classList.add('username');
-
-  name.textContent = data.name; 
-  username.textContent = data.login;
-  location.textContent = "Location: "+data.location;
-  profile.textContent = "Profile: "
-  followers.textContent = "Followers: "+data.followers;
-  following.textContent = "Following: "+data.following;
-  bio.textContent = "Bio: "+data.bio;
-
-
+  
+  expand.addEventListener('click', () => {
+    card.classList.toggle('card-open')
+  })
   return card;
 }
 
