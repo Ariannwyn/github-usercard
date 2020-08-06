@@ -28,7 +28,18 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const friendsArray = ['https://api.github.com/users/Uniloki', 'https://api.github.com/users/squishiedragon', 'https://api.github.com/users/allraec', 'https://api.github.com/users/harvey-magana', 'https://api.github.com/users/ariannwyn']
+friendsArray.forEach(friend =>
+  axios.get(friend) 
+    .then(response => {
+      console.log(response.data)
+      const cards = document.getElementsByClassName('cards')[0];
+      cards.appendChild(cardMaker(response.data))
+    })
+    .catch(error => {
+      console.log("error")
+    })
+  )
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,6 +60,51 @@ const followersArray = [];
       </div>
     </div>
 */
+
+function cardMaker(data) {
+  const card = document.createElement('div');
+  const userImg = document.createElement('img');
+  const cardInfo = document.createElement('div');
+  const name = document.createElement('h3');
+  const username = document.createElement('p');
+  const location = document.createElement('p');
+  const profile = document.createElement('p');
+  const link = document.createElement('a');
+  const followers = document.createElement('p');
+  const following = document.createElement('p');
+  const bio = document.createElement('p');
+
+  card.appendChild(userImg);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(name);
+  cardInfo.appendChild(username);
+  cardInfo.appendChild(location);
+  cardInfo.appendChild(profile);
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio);
+  profile.appendChild(link);
+
+  userImg.setAttribute('src', data.avatar_url);
+  link.setAttribute('src', data.html_url);
+  card.classList.add('card');
+  cardInfo.classList.add('card-info');
+  name.classList.add('name');
+  username.classList.add('username');
+
+  name.textContent = data.name; 
+  username.textContent = data.login;
+  location.textContent = "Location: "+data.location;
+  profile.textContent = "Profile: "
+  followers.textContent = "Followers: "+data.followers;
+  following.textContent = "Following: "+data.following;
+  bio.textContent = "Bio: "+data.bio;
+
+
+  return card;
+}
+
+
 
 /*
   List of LS Instructors Github username's:
