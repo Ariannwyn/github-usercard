@@ -43,7 +43,7 @@ let fakeData = [data, data, data];
 
 const friendsArray = ['https://api.github.com/users/Uniloki', 'https://api.github.com/users/squishiedragon', 'https://api.github.com/users/allraec', 'https://api.github.com/users/harvey-magana', 'https://api.github.com/users/ariannwyn']
 let cards = document.getElementsByClassName('cards')[0];
-fakeData.forEach(friend => {
+friendsArray.forEach(friend => {
   axios.get(friend) 
     .then(response => {
       console.log(response.data)
@@ -87,6 +87,8 @@ function cardMaker(data) {
   const following = document.createElement('p');
   const bio = document.createElement('p');
   const expand = document.createElement('span');
+  const email = document.createElement('p');
+  const twitter = document.createElement('p');
 
   card.classList.add('card');
   cardInfo.classList.add('card-info');
@@ -104,6 +106,8 @@ function cardMaker(data) {
   following.textContent = "Following: "+data.following;
   bio.textContent = "Bio: "+data.bio;
   expand.textContent = "+";
+  email.textContent = "Email: "+data.email;
+  twitter.textContent = "Twitter Handle: "+data.twitter_username;
 
   card.appendChild(userImg);
   card.appendChild(cardInfo);
@@ -119,6 +123,14 @@ function cardMaker(data) {
   
   expand.addEventListener('click', () => {
     card.classList.toggle('card-open')
+    if (card.classList.contains('card-open')){
+      cardInfo.appendChild(email);
+      cardInfo.appendChild(twitter);
+    }
+    else {
+      cardInfo.removeChild(email);
+      cardInfo.removeChild(twitter);
+    }
   })
   return card;
 }
